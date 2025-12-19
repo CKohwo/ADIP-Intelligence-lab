@@ -1,6 +1,6 @@
 # 🧠 ADIP Intelligence Lab
 
-**Automated Data Intelligence Portal (ADIP) — Intelligence Layer**
+**Automated Data Intelligence Platform (ADIP) — Intelligence Layer**
 
 ---
 
