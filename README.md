@@ -33,19 +33,6 @@ In short:
 
 ---
 
-## Design Philosophy
-
-This repository is built using a **Hybrid Blueprint** approach:
-
-* **Syllabus-first architecture** to ensure correctness and scalability
-* **Minimal, iterative implementations** to avoid overengineering
-* **Continuous integration** with live ingestion pipelines
-* **Learning-driven execution**, not blind code replication
-
-Each module is implemented in its *smallest useful form* first, then expanded only after validation with real data.
-
----
-
 ## Intelligence Modules
 
 The system is composed of six tightly integrated modules:
@@ -113,12 +100,6 @@ It is designed to:
 🚧 **Phase 2 — Data Intelligence Service (Active Development)**
 
 Modules are implemented iteratively and integrated continuously with the ADIP ingestion layer.
-
----
-
-## Guiding Principle
-
-> *Data is abundant. Intelligence is engineered.*
 
 ---
 
