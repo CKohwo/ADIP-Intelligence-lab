@@ -104,5 +104,6 @@ Modules are implemented iteratively and integrated continuously with the ADIP in
 ---
 
 ## Author
-Charles Onokohwomo 
+**Charles Onokohwomo** 
+
 Built and maintained as part of the **Automated Data Intelligence Portal (ADIP)** initiative.
