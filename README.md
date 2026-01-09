@@ -8,11 +8,9 @@
 
 The **ADIP Intelligence Lab** is the core intelligence engine of the Automated Data Intelligence Portal (ADIP).
 
-This repository is responsible for transforming *clean, ingested data* into **actionable intelligence** — insights, forecasts, and recommendations — through a modular, automated, and production-oriented analytics system.
+This repository is responsible for transforming *clean, ingested data* into **actionable intelligence** — insights, forecasts, and recommendations — through a modular, automated, and production-oriented analytics system. While the ingestion layer focuses on *collecting and standardizing data*, the Intelligence Lab focuses on *understanding it*.
 
-While the ingestion layer focuses on *collecting and standardizing data*, the Intelligence Lab focuses on *understanding it*.
-
-This project is intentionally built as a **learning-first, systems-engineering lab**, emphasizing deep conceptual understanding alongside real-world implementation.
+This project is intentionally built as a **learning-first, systems-engineering lab** alongside real-world implementation.
 
 ---
 
