@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
-from diss.data_manager import fetch_via_http
+from intelligence_system.data_manager import fetch_via_http
 from config import scraper_url
 
 # THIS WILL FEATURE THE API AUTH RAW URL 
