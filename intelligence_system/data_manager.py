@@ -76,8 +76,7 @@ def fetch_via_http(url:str, cache_ttl_sec=172800, cache_name:str = None) -> pd.D
 
 
 def ingest_adip_data() -> dict:
-    """Orchestrates the downloading of all required datasets defined in config."""
-    session = requests_sessions()
+    """Orchestrates the downloading of all required datasets defined in config.""" 
     adip_dataframes = {}
     
     # Iterate through our dictionary of endpoints
