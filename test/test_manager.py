@@ -6,8 +6,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
-from intelligence_system.data_manager import fetch_via_http
-from intelligence_system.data_manager import requests_sessions
+from dis.data_manager import fetch_via_http
+from dis.data_manager import requests_sessions
 from config import URL_ENDPOINT
 
 # THIS WILL FEATURE THE API AUTH RAW URL 
