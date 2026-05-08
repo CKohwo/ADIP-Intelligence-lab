@@ -8,7 +8,7 @@ if str(ROOT) not in sys.path:
 
 from data_bridge.data_manager import fetch_via_http
 from data_bridge.data_manager import requests_sessions
-from config import URL_ENDPOINT
+from data_bridge.config import URL_ENDPOINT
 
 # THIS WILL FEATURE THE API AUTH RAW URL 
 data = "api_auth" 

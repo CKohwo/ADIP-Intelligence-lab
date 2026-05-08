@@ -17,6 +17,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
     }, inplace=True)
 
     df["price"] = df["price"].apply(clean_price)
+    
     df["fetched_time"] = pd.to_datetime(df["fetched_time"], utc=True)
 
     df["product_id"] = df.apply(

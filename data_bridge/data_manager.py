@@ -82,6 +82,7 @@ def ingest_adip_data() -> dict:
     # Iterate through our dictionary of endpoints
     for name, url in URL_ENDPOINT.items():
         # Store the resulting DataFrame in a new dictionary using the dataset name
+        
         adip_dataframes[name] = fetch_via_http(url=url, cache_name=f"{name}.csv")
         
     return adip_dataframes
