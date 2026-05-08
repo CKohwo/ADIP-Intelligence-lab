@@ -82,8 +82,13 @@ def ingest_adip_data() -> dict:
     # Iterate through our dictionary of endpoints
     for name, url in URL_ENDPOINT.items():
         # Store the resulting DataFrame in a new dictionary using the dataset name
-        
-        adip_dataframes[name] = fetch_via_http(url=url, cache_name=f"{name}.csv")
+        df = fetch_via_http(url=url, cache_name=f"{name}.csv")
+
+        # If fetching fails and no valid cache is available, raise an error to prevent downstream issues.
+        if df is None:
+            raise RuntimeError(f"Failed to fetch data for {name} from {url} and no valid cache available.")
+         
+        adip_dataframes[name] = df
         
     return adip_dataframes
    
@@ -92,7 +97,4 @@ if __name__ == "__main__":
     print("Starting data ingestion process...")
     data = ingest_adip_data()
     print(f"Data ingestion completed. Datasets available:{list(data.keys())}")
-             
-        
-        
-
+    
