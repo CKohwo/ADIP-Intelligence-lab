@@ -20,7 +20,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
     }, inplace=True)
 
     # --- Parse datetime ---
-    df["event_time"] = pd.to_datetime(df["fetched_time"], utc=True)
+    df["fetched_time"] = pd.to_datetime(df["fetched_time"], utc=True)
 
     # --- Extract nested ---
     df["stock_qty"] = df["stock"].apply(extract_stock_quantity)
