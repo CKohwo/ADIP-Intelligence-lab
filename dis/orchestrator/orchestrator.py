@@ -3,8 +3,8 @@ from pathlib import Path
 
 from data_bridge import ingest_adip_data
 
-from data_intelligence.transformers.api_ingest import transform as clean_api
-from data_intelligence.transformers.scraper import transform as clean_scraper
+from dis.transformers.api_ingest import transform as clean_api
+from dis.transformers.scraper import transform as clean_scraper
  
 # Orchestrator function to build the final dataset from both sources -- 
   
