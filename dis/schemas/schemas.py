@@ -9,6 +9,6 @@ EXPECTED_COLUMNS = [
     "seller_name",
     "stock_qty",
     "category",
-    "fetch_time",
+    "fetched_time",
     "source"
 ]
