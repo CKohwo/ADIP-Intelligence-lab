@@ -7,20 +7,46 @@ import pandas as pd
 # The functions are designed to handle various formats and potential inconsistencies in the input data.
 
 def clean_price(price):
-    if price is None:
+    if price is None or pd.isna(price):
         return None
     try:
         return float(re.sub(r"[^\d.]", "", str(price)))
-    except:
+    except Exception:
         return None
 
 
 def safe_literal_eval(value):
-    try:
-        return ast.literal_eval(value) if isinstance(value, str) else value
-    except:
+    # This function safely evaluates a string that is expected to represent a Python literal (like a dictionary).
+
+    # If the value is already a dictionary, return it directly.
+    if isinstance(value, dict):
+        return value
+
+    # If the value is missing, return an empty dictionary.
+    if value is None:
         return {}
 
+    # If the value is a pandas/numpy and contains missing value like NaN, return an empty dictionary.
+    try:
+        if pd.isna(value):
+            return {}
+    except Exception:
+        pass
+
+    # If the value is not a string, we do not try to parse it.
+    if not isinstance(value, str):
+        return {}
+
+    # Converting the string representation of a Python literal into a real object.
+    try:
+        parsed = ast.literal_eval(value)
+
+        # Only accept dictionaries. Anything else becomes an empty dictionary.
+        return parsed if isinstance(parsed, dict) else {}
+
+    except Exception:
+        # If parsing fails, return an empty dictionary instead of crashing.
+        return {}
 
 def extract_stock_quantity(stock):
     stock_dict = safe_literal_eval(stock)

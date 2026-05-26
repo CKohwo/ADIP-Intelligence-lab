@@ -1,5 +1,5 @@
 import pandas as pd
-from dis.tools.parser import (
+from intelligence_system.tools.parser import (
     extract_stock_quantity,
     extract_rating,
     extract_seller_name,
@@ -7,6 +7,7 @@ from dis.tools.parser import (
 )
 from intelligence_system.tools.identifier import generate_product_id
 from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
+
 
 
 def transform(df: pd.DataFrame) -> pd.DataFrame:
