@@ -39,12 +39,25 @@ def extract_seller_name(seller):
 
 
 def validate_columns(df: pd.DataFrame) -> pd.DataFrame:
-    columns = df[["price", "fetched_time", "product_id"]]
-    
-    for col in columns:
+    critical_columns = ["price", "fetched_time", "product_id"] 
+    # Define critical columns that must not be missing
+
+    missing_columns = [col for col in critical_columns if col not in df.columns]
+    if missing_columns:
+        raise ValueError(f"Missing critical columns: {', '.join(missing_columns)}")
+    row_before = len(df)
+
+    for col in critical_columns:
         missing_count = df[col].isna().sum()
         if missing_count > 0:
             print(f"Column '{col}' has {missing_count} missing values.")
 
-    df = df.dropna(subset=[columns])
+    # Drop rows with missing critical values and create a copy to avoid SettingWithCopyWarning
+    df = df.dropna(subset=critical_columns).copy() 
+    row_after = len(df)
+    dropped_row = row_before - row_after
+    if dropped_row > 0:
+        print(f"Dropped {dropped_row} rows due to missing critical values.")
+
     return df    
+ 

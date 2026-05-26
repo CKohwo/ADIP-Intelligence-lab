@@ -1,8 +1,8 @@
 import pandas as pd
-from dis.tools.parser import clean_price
-from dis.tools.parser import validate_columns
-from dis.tools.identifier import generate_product_id
-from dis.schemas.schemas import EXPECTED_COLUMNS
+from intelligence_system.tools.parser import clean_price
+from intelligence_system.tools.parser import validate_columns
+from intelligence_system.tools.identifier import generate_product_id
+from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
 
 
 def transform(df: pd.DataFrame) -> pd.DataFrame:

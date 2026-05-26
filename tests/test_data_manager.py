@@ -35,12 +35,13 @@ def test_all_endpoints_return_valid_dataframes_and_persist_to_cache(monkeypatch,
         cache_path = tmp_path / cache_name
         assert cache_path.exists(), f"{name}: not written to temp cache"
 
+        print(f" {name}: {len(df)} rows, cache saved at {cache_path}")
+
 
 def test_ttl_logic_routes_correctly_between_cache_and_http(monkeypatch, tmp_path):
     """
-    PROMISE: TTL logic correctly decides between disk and network.
+    TTL logic correctly decides between disk and network.
     
-    TEACHING POINT:
     This is ONE promise with TWO verification gates:
     1. Fresh cache (< TTL) → read from disk (fast, no HTTP).
     2. Expired cache (> TTL) → refetch from URL (mtime changes).

@@ -5,8 +5,8 @@ from dis.tools.parser import (
     extract_seller_name,
     validate_columns
 )
-from dis.tools.identifier import generate_product_id
-from dis.schemas.schemas import EXPECTED_COLUMNS
+from intelligence_system.tools.identifier import generate_product_id
+from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
 
 
 def transform(df: pd.DataFrame) -> pd.DataFrame:
