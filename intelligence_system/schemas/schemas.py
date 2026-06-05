@@ -12,3 +12,25 @@ EXPECTED_COLUMNS = [
     "fetched_time",
     "source"
 ]
+
+
+FEATURE_COLUMNS = [
+    "product_id",
+    "product_name",
+    "brand",
+    "seller_name",
+    "category",
+    "first_seen",
+    "last_seen",
+    "observation_count",
+    "min_price",
+    "max_price",
+    "avg_price",
+    "latest_price",
+    "price_change_abs",
+    "price_change_pct",
+    "avg_rating",
+    "latest_rating",
+    "latest_stock_qty",
+    "source",
+]
