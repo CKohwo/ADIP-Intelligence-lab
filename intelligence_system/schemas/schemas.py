@@ -14,23 +14,24 @@ EXPECTED_COLUMNS = [
 ]
 
 
-FEATURE_COLUMNS = [
+API_PRODUCT_FEATURE = [
     "product_id",
     "product_name",
     "brand",
     "seller_name",
-    "category",
+    "source",
+
     "first_seen",
     "last_seen",
+    "days_active",
     "observation_count",
-    "min_price",
-    "max_price",
+
     "avg_price",
     "latest_price",
-    "price_change_abs",
-    "price_change_pct",
+    "price_tier",
+
     "avg_rating",
     "latest_rating",
+    "total_rating_count",
     "latest_stock_qty",
-    "source",
 ]
