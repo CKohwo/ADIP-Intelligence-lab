@@ -1,13 +1,18 @@
-import os
+import sys
 import pandas as pd
 from pathlib import Path
-from intelligence_system.schemas import API_PRODUCT_FEATURE, API_BRAND_FEATURE, API_SELLER_FEATURE
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+from intelligence_system.schemas.schemas import API_PRODUCT_FEATURE, API_BRAND_FEATURE, API_SELLER_FEATURE
 
 Processed_data_dir = Path("data/processed/api_ingest.parquet")
-API_feature_data_dir = Path("data/features/api_ingest")
+API_feature_dir = Path("data/features/api_ingest")
 
  
-def normalize_dataset(df:pd.Datframe) -> pd.DataFrame:
+def normalize_dataset(df:pd.DataFrame) -> pd.DataFrame:
     """
     This function normalizes the dataset.
     """
@@ -76,7 +81,7 @@ def build_brand_featrures(df: pd.DataFrame) -> pd.DataFrame:
                                                    avg_stock_qty = ("stock_qty", "mean"), source = ("source", "last")).reset_index()
     
     # Creating a price tier feature based on the average price of the brand using quantiles to categorize brands into low, mid, and high price tiers.
-    grouped["brand_price_tier"] = pd.qcut(grouped["median_price"], q=3, labels= ["Low", "Mid", "High"])
+    grouped["price_tier"] = pd.qcut(grouped["median_price"], q=3, labels= ["Low", "Mid", "High"])
 
     features = grouped[API_BRAND_FEATURE]
 
@@ -97,7 +102,7 @@ def build_seller_features(df: pd.DataFrame) -> pd.DataFrame:
                                                    avg_stock_qty = ("stock_qty", "mean"), source = ("source", "last")).reset_index()
     
     # Creating a price tier feature based on the average price of the seller using quantiles to categorize sellers into low, mid, and high price tiers.
-    grouped["seller_price_tier"] = pd.qcut(grouped["median_price"], q=3, labels= ["Low", "Mid", "High"])
+    grouped["price_tier"] = pd.qcut(grouped["median_price"], q=3, labels= ["Low", "Mid", "High"])
 
     features = grouped[API_SELLER_FEATURE]
 
@@ -111,14 +116,27 @@ def save_features(df: pd.DataFrame, output_dir: Path, label: str) -> None:
     print(f"{output_dir} features created and saved successfully: {df.shape}, {label}") 
 
 
-def run_product_intelligence() -> pd.DataFrame:
-    """This function runs the product intelligence pipeline by reading the processed data, creating product features, and saving the features to a parquet file.
+def run_api_feature_engine_pipeline():
+    """ This function runs the API feature engineering pipeline by calling the necessary functions to build and save the product, brand, and seller features.
     """
-    if not Processed_data_dir.parent.exists():
-        raise FileNotFoundError(f"The directory {Processed_data_dir.parent} does not exist. Please create the directory before running the pipeline.")    
+    if not Processed_data_dir.exists():
+        raise FileNotFoundError(
+            f"The directory {Processed_data_dir.parent} does not exist."  
+            "Please create the directory before running the pipeline.")    
     
-    Product_features_dir.parent.mkdir(parents=True, exist_ok=True) 
+    API_feature_dir.parent.mkdir(parents=True, exist_ok=True) 
 
     df = pd.read_parquet(Processed_data_dir)
     product_features = build_product_features(df)
-    save_features(product_features, Product_features_dir, "Product")
+    brand_features = build_brand_featrures(df)
+    seller_features = build_seller_features(df)
+    save_features(product_features, API_feature_dir/ "product_features.parquet", "Product")
+    save_features(brand_features, API_feature_dir/ "brand_features.parquet", "Brand")
+    save_features(seller_features, API_feature_dir/ "seller_features.parquet", "Seller")
+    
+    return{"product": product_features,"brand" : brand_features, "seller": seller_features} 
+     
+
+if __name__ == "__main__":
+    run_api_feature_engine_pipeline()
+    print("API feature engineering pipeline completed successfully.")  
