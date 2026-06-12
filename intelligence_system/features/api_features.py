@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
+from intelligence_system.tools.normalizer import clean_brand_value
 from intelligence_system.schemas.schemas import API_PRODUCT_FEATURE, API_BRAND_FEATURE, API_SELLER_FEATURE
 
 Processed_data_dir = Path("data/processed/api_ingest.parquet")
@@ -24,6 +25,9 @@ def normalize_dataset(df:pd.DataFrame) -> pd.DataFrame:
     df["rating_count"] = pd.to_numeric(df["rating_count"], errors = "coerce")
     df["stock_qty"] = pd.to_numeric(df["stock_qty"], errors = "coerce") 
 
+    df["brand"] = df["brand"].apply(clean_brand_value)
+    df["seller_name"] = df["seller_name"].fillna("Unknown").astype(str).str.strip()
+
     df = df.dropna(subset=["product_id", "fetched_time", "price"])
 
     return df  
@@ -40,7 +44,7 @@ def build_product_features(df:pd.DataFrame) -> pd.DataFrame:
 
     grouped = df.groupby("product_id", dropna=False).agg(product_name = ("product_name", "last"), brand = ("brand", "last"), seller_name = ("seller_name", "last"), source = ("source", "last"), first_seen = ("fetched_time", "first"), last_seen = ("fetched_time", "last"),
                                                    observation_count = ("product_id", "size"), avg_price = ("price", "mean"), current_price = ("price", "last"), avg_rating = ("product_rating", "mean"), current_rating = ("product_rating", "last"), 
-                                                   total_rating_count = ("product_rating", "sum"), stock_qty = ("stock_qty", "last")).reset_index()
+                                                   total_rating_count = ("rating_count", "sum"), stock_qty = ("stock_qty", "last")).reset_index()
     
     grouped["days_active"] = (grouped["last_seen"] - grouped["first_seen"]).dt.days
     
@@ -49,6 +53,7 @@ def build_product_features(df:pd.DataFrame) -> pd.DataFrame:
     grouped["price_tier"] = pd.qcut(grouped["current_price"], q=3, labels= ["Low", "Mid", "High"])
 
     features = grouped[API_PRODUCT_FEATURE]
+    features = features.sort_values(by = ["observation_count", "total_rating_count", "product_name"], ascending=[False, False, True]).reset_index(drop=True)
 
     return features
 
@@ -67,23 +72,30 @@ def get_top_value(series: pd.Series) -> str:
 
 
 # The build_brand_features function takes a DataFrame as input and performs the following steps: 
-def build_brand_featrures(df: pd.DataFrame) -> pd.DataFrame:
+def build_brand_featrures(product_features: pd.DataFrame) -> pd.DataFrame:
     """This function creates brand level intelligence by aggregating the data by brand and 
     calculating the average price, average rating, total rating count, and stock quantity for each brand.
     """
-    df = normalize_dataset(df)
+    df = product_features.copy()
 
-    df["brand"] = df["brand"].fillna("Unknown")
-    df["seller_name"] = df["seller_name"].fillna("Unknown")
+    df["brand"] = df["brand"].fillna("Unknown") 
+    df["seller_name"] = df["seller_name"].fillna("Unknown") 
+ 
+    grouped = df.groupby("brand", dropna=False).agg(product_count = ("product_id", "nunique"), observation_count = ("observation_count", "sum"), seller_count = ("seller_name", "nunique"), top_seller = ("seller_name", get_top_value), 
+                                                   avg_price = ("current_price", "mean"), median_price = ("current_price", "median"), avg_rating = ("avg_rating", "mean"), total_rating_count = ("total_rating_count", "sum"), 
+                                                   avg_stock_qty = ("stock_qty", "mean"), source = ("source", "last")).reset_index()  
 
-    grouped = df.groupby("brand", dropna=False).agg(product_count = ("product_id", "nunique"), observation_count = ("product_id", "size"), seller_count = ("seller_name", "nunique"), top_seller = ("seller_name", get_top_value), 
-                                                   avg_price = ("price", "mean"), median_price = ("price", "median"), avg_rating = ("product_rating", "mean"), total_rating_count = ("rating_count", "sum"), rating_coverage_pct = ("product_rating", lambda x: x.notna().mean() * 100), 
-                                                   avg_stock_qty = ("stock_qty", "mean"), source = ("source", "last")).reset_index()
+    # Calculating the percentage of products with ratings for each brand to create a rating coverage feature under each brand that have received ratings.                                               
+    rating_coverage_pct = (df.assign(ratings = (df["avg_rating"] > 0) & (df["total_rating_count"] > 0)).groupby("brand")["ratings"].mean().mul(100).reset_index(name="rating_coverage_pct"))
+    
+    grouped = grouped.merge(rating_coverage_pct, on="brand", how="left")
     
     # Creating a price tier feature based on the average price of the brand using quantiles to categorize brands into low, mid, and high price tiers.
     grouped["price_tier"] = pd.qcut(grouped["median_price"], q=3, labels= ["Low", "Mid", "High"])
 
     features = grouped[API_BRAND_FEATURE]
+
+    features = features.sort_values(by = ["product_count", "observation_count", "total_rating_count", "brand"], ascending=[False, False, False, True]).reset_index(drop=True)
 
     return features
 
@@ -93,10 +105,7 @@ def build_seller_features(df: pd.DataFrame) -> pd.DataFrame:
     calculating the average price, average rating, total rating count, and stock quantity for each seller.
     """
     df = normalize_dataset(df)
-
-    df["brand"] = df["brand"].fillna("Unknown")
-    df["seller_name"] = df["seller_name"].fillna("Unknown")
-
+ 
     grouped = df.groupby("seller_name", dropna=False).agg(product_count = ("product_id", "nunique"), observation_count = ("product_id", "size"), brand_count = ("brand", "nunique"), top_brand = ("brand", get_top_value), 
                                                    avg_price = ("price", "mean"), median_price = ("price", "median"), avg_rating = ("product_rating", "mean"), total_rating_count = ("rating_count", "sum"), rating_coverage_pct = ("product_rating", lambda x: x.notna().mean() * 100), 
                                                    avg_stock_qty = ("stock_qty", "mean"), source = ("source", "last")).reset_index()
@@ -105,7 +114,8 @@ def build_seller_features(df: pd.DataFrame) -> pd.DataFrame:
     grouped["price_tier"] = pd.qcut(grouped["median_price"], q=3, labels= ["Low", "Mid", "High"])
 
     features = grouped[API_SELLER_FEATURE]
-
+    features = features.sort_values(by = ["product_count", "observation_count", "total_rating_count", "seller_name"], ascending=[False, False, False, True]).reset_index(drop=True)
+    
     return features
 
 
@@ -128,7 +138,7 @@ def run_api_feature_engine_pipeline():
 
     df = pd.read_parquet(Processed_data_dir)
     product_features = build_product_features(df)
-    brand_features = build_brand_featrures(df)
+    brand_features = build_brand_featrures(product_features)
     seller_features = build_seller_features(df)
     save_features(product_features, API_feature_dir/ "product_features.parquet", "Product")
     save_features(brand_features, API_feature_dir/ "brand_features.parquet", "Brand")
