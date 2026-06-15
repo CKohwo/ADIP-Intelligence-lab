@@ -109,8 +109,10 @@ def build_seller_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     df = normalize_dataset(df)
  
+    df["rating_evidence"] = (df["product_rating"].fillna(0) > 0) & (df["rating_count"].fillna(0) > 0)
+ 
     grouped = df.groupby("seller_name", dropna=False).agg(product_count = ("product_id", "nunique"), observation_count = ("product_id", "size"), brand_count = ("brand", "nunique"), top_brand = ("brand", get_top_value), 
-                                                   avg_price = ("price", "mean"), median_price = ("price", "median"), avg_rating = ("product_rating", "mean"), total_rating_count = ("rating_count", "sum"), rating_coverage_pct = ("product_rating", lambda x: x.notna().mean() * 100), 
+                                                   avg_price = ("price", "mean"), median_price = ("price", "median"), avg_rating = ("product_rating", "mean"), total_rating_count = ("rating_count", "sum"), rating_coverage_pct = ("rating_evidence", lambda x: x.mean() * 100), 
                                                    avg_stock_qty = ("stock_qty", "mean"), source = ("source", "last")).reset_index()
     
     # Creating a price tier feature based on the average price of the seller using quantiles to categorize sellers into low, mid, and high price tiers.

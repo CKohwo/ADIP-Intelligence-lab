@@ -48,7 +48,7 @@ def build_product_timeseries(df: pd.DataFrame) -> pd.DataFrame:
         avg_rating=("product_rating", "mean"),
         current_rating=("product_rating", "last"),
         total_rating_count=("rating_count", "sum"),
-        rating_coverage_pct=("rating_count", lambda x: x.notna().mean() * 100),
+        rating_coverage_pct=("rating_count", lambda x: (x.fillna(0)>0).mean() * 100),
         stock_qty=("stock_qty", "last"),
         source=("source", "last")
     ).reset_index()
@@ -77,7 +77,7 @@ def build_brand_timeseries(df: pd.DataFrame) -> pd.DataFrame:
         median_price=("price", "median"),
         avg_rating=("product_rating", "mean"),
         total_rating_count=("rating_count", "sum"),
-        rating_coverage_pct=("rating_count", lambda x: x.notna().mean() * 100),
+        rating_coverage_pct=("rating_count", lambda x: (x.fillna(0)>0).mean() * 100),
         avg_stock_qty=("stock_qty", "mean"),
         source=("source", "last")
     ).reset_index()
@@ -105,7 +105,7 @@ def build_seller_timeseries(df: pd.DataFrame) -> pd.DataFrame:
         median_price=("price", "median"),
         avg_rating=("product_rating", "mean"),
         total_rating_count=("rating_count", "sum"),
-        rating_coverage_pct=("rating_count", lambda x: x.notna().mean() * 100),
+        rating_coverage_pct=("rating_count", lambda x: (x.fillna(0)>0).mean() * 100),
         avg_stock_qty=("stock_qty", "mean"),
         source=("source", "last")
     ).reset_index()     
