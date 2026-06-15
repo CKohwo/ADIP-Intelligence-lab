@@ -33,6 +33,21 @@ def normalize_dataset(df:pd.DataFrame) -> pd.DataFrame:
     return df  
 
 
+# The get_top_value function takes a pandas Series as input and returns the top value for a given column based on the mode. 
+def get_top_value(series: pd.Series) -> str:
+    """This function returns the top value for a given column based on the mode.
+    """
+    clean_series = series.dropna()
+
+    if clean_series.empty:
+        return "None"
+    
+    value_counts = clean_series.value_counts()  
+    
+    return value_counts.index[0]
+ 
+
+# The build_product_features function takes a DataFrame as input and performs the following steps:
 def build_product_features(df:pd.DataFrame) -> pd.DataFrame:
     """This function creates product level intelligence by aggregating the data by product_id and 
     calculating the average price, average rating, total rating count, and stock quantity for each product.
@@ -57,20 +72,7 @@ def build_product_features(df:pd.DataFrame) -> pd.DataFrame:
 
     return features
 
-# The get_top_value function takes a pandas Series as input and returns the top value for a given column based on the mode. 
-def get_top_value(series: pd.Series) -> str:
-    """This function returns the top value for a given column based on the mode.
-    """
-    clean_series = series.dropna()
-
-    if clean_series.empty:
-        return "None"
-    
-    value_counts = clean_series.value_counts()  
-    
-    return value_counts.index[0]
-
-
+ 
 # The build_brand_features function takes a DataFrame as input and performs the following steps: 
 def build_brand_featrures(product_features: pd.DataFrame) -> pd.DataFrame:
     """This function creates brand level intelligence by aggregating the data by brand and 
@@ -100,6 +102,7 @@ def build_brand_featrures(product_features: pd.DataFrame) -> pd.DataFrame:
     return features
 
 
+# The build_seller_features function takes a DataFrame as input and performs the following steps:
 def build_seller_features(df: pd.DataFrame) -> pd.DataFrame:
     """This function creates seller level intelligence by aggregating the data by seller_name and 
     calculating the average price, average rating, total rating count, and stock quantity for each seller.
@@ -127,7 +130,8 @@ def save_features(df: pd.DataFrame, output_dir: Path, label: str) -> None:
 
 
 def run_api_feature_engine_pipeline():
-    """ This function runs the API feature engineering pipeline by calling the necessary functions to build and save the product, brand, and seller features.
+    """ This function runs the API feature engineering pipeline by calling the necessary functions to build 
+    and save the product, brand, and seller features.
     """
     if not Processed_data_dir.exists():
         raise FileNotFoundError(
@@ -149,4 +153,4 @@ def run_api_feature_engine_pipeline():
 
 if __name__ == "__main__":
     run_api_feature_engine_pipeline()
-    print("API feature engineering pipeline completed successfully.")  
+    print("API feature engineering pipeline completed successfully.")   
