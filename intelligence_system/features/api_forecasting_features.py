@@ -159,7 +159,7 @@ def run_forecasting_features_pipeline(input_dir:Path = Processed_data_dir, outpu
             f"The directory {input_dir.parent} does not exist."  
             "Please create the directory before running the pipeline.")
     
-    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_parquet(input_dir)
 
@@ -174,16 +174,16 @@ def run_forecasting_features_pipeline(input_dir:Path = Processed_data_dir, outpu
 
     # Save the forecasting features to parquet files
     output_paths = {
-        "product_timeseries": output_dir / "product_forecast.parquet",
-        "brand_timeseries": output_dir / "brand_forecast.parquet",
-        "seller_timeseries": output_dir / "seller_forecast.parquet",
+        "product_timeseries": output_dir / "product_timeseries.parquet",
+        "brand_timeseries": output_dir / "brand_timeseries.parquet",
+        "seller_timeseries": output_dir / "seller_timeseries.parquet",
         "forecast_readiness": output_dir / "forecast_readiness.parquet"
     }
 
 
-    product_readiness.to_parquet(output_paths["product_timeseries"], index=False)
-    brand_readiness.to_parquet(output_paths["brand_timeseries"], index=False)
-    seller_readiness.to_parquet(output_paths["seller_timeseries"], index=False)
+    product_timeseries.to_parquet(output_paths["product_timeseries"], index=False)
+    brand_timeseries.to_parquet(output_paths["brand_timeseries"], index=False)
+    seller_timeseries.to_parquet(output_paths["seller_timeseries"], index=False)
     forecast_readiness.to_parquet(output_paths["forecast_readiness"], index=False) 
 
     print(f"Forecasting features created and saved successfully: {output_paths}")
