@@ -8,7 +8,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
  
 from intelligence_system.transformers.api_ingest import transform
-from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
+from intelligence_system.schemas.schemas import API_COLUMNS
 
 # Path to the real cached data
 CACHE_DIR = ROOT / ".data_cache"
@@ -30,7 +30,7 @@ def test_api_ingest_transformer_on_real_cached_data():
     assert not cleaned_df.empty
 
     # Schema contract
-    assert list(cleaned_df.columns) == EXPECTED_COLUMNS
+    assert list(cleaned_df.columns) == API_COLUMNS
 
     # Critical fields
     assert cleaned_df["product_id"].notna().all()
@@ -65,5 +65,5 @@ def test_transform_handles_missing_critical_columns():
     damaged_df.rename(columns={"product_name": "title"}, inplace=True)  # Break the schema
 
     # Act & Assert: Expect the transformer to raise an error due to missing critical columns
-    assert list(damaged_df.columns) != EXPECTED_COLUMNS 
+    assert list(damaged_df.columns) != API_COLUMNS 
     print("Test passed: Transformer correctly identifies missing critical columns.")

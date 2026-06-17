@@ -77,3 +77,5 @@ def clean_brand_value(value) -> str:
 
     # Default formatting for unknown-but-plausible brands
     return brand.title()
+
+    

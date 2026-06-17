@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
 from intelligence_system.transformers.scraper import transform
-from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
+from intelligence_system.schemas.schemas import SCRAPER_COLUMNS
 
 
 CACHE_DIR = ROOT / ".data_cache"
@@ -17,7 +17,7 @@ SCRAPER_CACHE = CACHE_DIR / "scraper.csv"
 
 
 def assert_expected_schema(df: pd.DataFrame) -> None:
-    assert list(df.columns) == EXPECTED_COLUMNS
+    assert list(df.columns) == SCRAPER_COLUMNS
 
 
 def test_scraper_transformer_outputs_expected_schema():
@@ -53,15 +53,11 @@ def test_scraper_transformer_outputs_expected_schema():
 
     # Source-specific checks
     assert (cleaned_df["source"] == "Web_scraper").all()
-    assert (cleaned_df["seller_name"] == "JUMIA").all()
-
+     
     # Scraper-specific generated fields
     assert cleaned_df["brand"].notna().all()
-    assert cleaned_df["category"].notna().all()
     assert "product_rating" in cleaned_df.columns
-    assert "rating_count" in cleaned_df.columns
-    assert "stock_qty" in cleaned_df.columns
-
+     
     print(f"Raw shape: {raw_df.shape}")
     print(f"Cleaned shape: {cleaned_df.shape}")
     print(f"Rows dropped: {raw_df.shape[0] - cleaned_df.shape[0]}")

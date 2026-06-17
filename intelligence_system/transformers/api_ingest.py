@@ -5,8 +5,8 @@ from intelligence_system.tools.parser import (
     extract_seller_name,
     validate_columns
 )
-from intelligence_system.tools.identifier import generate_product_id
-from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
+from intelligence_system.tools.identifier import generate_product_key
+from intelligence_system.schemas.schemas import API_COLUMNS
 
 
 
@@ -40,7 +40,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
         df["product_id"] = df["sku"]
     else:
         df["product_id"] = df.apply(
-            lambda x: generate_product_id(
+            lambda x: generate_product_key(
                 x["product_name"], x["price"], x["fetched_time"]
             ),
             axis=1
@@ -49,12 +49,8 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
     # --- Add source ---
     df["source"] = "api_ingest"
 
-    # --- Category fallback, set to None if missing --- 
-    if "category" not in df.columns:
-        df["category"] = None
-
     # --- Select the expected columns in the defined order ---    
-    df = df[EXPECTED_COLUMNS]
+    df = df[API_COLUMNS]
 
     # --- Validation, ensure no critical fields are missing --- 
     df = validate_columns(df)
