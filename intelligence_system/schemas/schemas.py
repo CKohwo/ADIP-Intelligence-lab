@@ -83,8 +83,51 @@ SELLERS_TIMESERIES_COLUMNS = [
     "rating_coverage_pct", "avg_stock_qty", "source"]
 
 
-READINESS_COLUMNS = [
-    "entity_type", "entity_id", "entity_name",
-    "start_day", "end_day", "period_count",
-    "total_observations", "avg_observations_per_period",
-    "eligible_for_forecasting"]
+ 
+# --------------------------------------------
+    # SCRAPER FEATURE ENGINEERING SCHEMA 
+# --------------------------------------------
+
+SCRAPER_CATEGORY_FEATURES = [
+    "category", 
+
+    "listing_volume",
+    "product_variety_count",
+    "brand_count",
+    "top_brand",
+
+    "median_price", "price_tier", 
+    "avg_rating", "rating_coverage_pct", "source"
+]
+
+SCRAPER_BRAND_FEATURES = [
+    "brand", 
+
+    "listing_volume",
+    "product_variety_count",
+    "category_count",
+    "top_category",
+
+    "median_price", "price_tier",
+
+    "avg_rating","rating_coverage_pct","source"
+]
+ 
+
+# SCRAPER FORECAST READINESS CANONICAL SCHEMA
+
+SCRAPER_CATEGORY_TIMESERIES = [
+    "day", "category", "listing_volume",
+    "product_variety_count", "brand_count",
+    "median_price", "avg_rating", "rating_coverage_pct", 
+    "source"
+]
+
+SCRAPER_BRAND_TIMESERIES = [
+    "day", "brand", "listing_volume",
+    "product_variety_count", "category_count", 
+    "median_price", "avg_rating", "rating_coverage_pct",
+    "source"
+]
+
+ 
