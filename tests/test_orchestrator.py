@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
-from intelligence_system.orchestrator.orchestrator import run_orchestration
+from intelligence_system.orchestrator.transform_pipeline import run_orchestration
 from intelligence_system.schemas.schemas import EXPECTED_COLUMNS
 
 

@@ -17,9 +17,9 @@ PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def run_orchestration() -> dict:
+def run_tranfrom_pipeline() -> dict:
     """
-    Runs the ADIP Intelligence orchestration layer.
+    Runs the ADIP Intelligence transformers pipeline layer.
 
     Responsibilities:
     - Pull datasets from the data bridge.
@@ -98,4 +98,4 @@ def run_orchestration() -> dict:
 
 
 if __name__ == "__main__":
-    run_orchestration()
+    run_tranfrom_pipeline()
