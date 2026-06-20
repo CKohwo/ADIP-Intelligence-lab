@@ -11,7 +11,7 @@ from intelligence_system.features.api_features import get_top_value
 from intelligence_system.schemas.schemas import SCRAPER_CATEGORY_FEATURES, SCRAPER_BRAND_FEATURES 
 
 
-Data_dir = Path("data/processed/scraper.parquet")
+Data_dir = Path("data/transformed/scraper.parquet")
 Scraper_features_dir = Path("data/features/scraper")
 
 
@@ -110,34 +110,4 @@ def save_features(df: pd.DataFrame, output_path: Path, label: str) -> None:
     df.to_parquet(output_path, index=False)
 
     print(f"{output_path} features created and saved successfully: {df.shape}, {label}")
-
-
-def run_scraper_feature_pipeline():
-
-    if not Data_dir.exists():
-        raise FileNotFoundError(
-            f"The processed scraper file does not exist: {Data_dir}. "
-            "Run the orchestrator before scraper feature engineering."
-        )
-
-    Scraper_features_dir.mkdir(parents=True, exist_ok=True)
-
-    df = pd.read_parquet(Data_dir)
-
-    category_features = build_category_features(df)
-    brand_features = build_brand_features(df)
-     
-    save_features(category_features, Scraper_features_dir / "category_features.parquet", "Category")
-    
-    save_features(brand_features, Scraper_features_dir / "brand_features.parquet", "Brand") 
-    
-    return {
-        "category_features": category_features,
-        "brand_features": brand_features,
-        }
-
-
-if __name__ == "__main__":
-    run_scraper_feature_pipeline()
-    print("Scraper AI snapshot feature engineering pipeline completed successfully.")
-    
+ 

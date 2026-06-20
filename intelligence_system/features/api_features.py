@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
 from intelligence_system.tools.normalizer import clean_brand_value
 from intelligence_system.schemas.schemas import API_PRODUCT_FEATURE, API_BRAND_FEATURE, API_SELLER_FEATURE
 
-Processed_data_dir = Path("data/processed/api_ingest.parquet")
+Processed_data_dir = Path("data/transformed/api_ingest.parquet")
 API_feature_dir = Path("data/features/api_ingest")
 
  
@@ -130,29 +130,4 @@ def save_features(df: pd.DataFrame, output_dir: Path, label: str) -> None:
     df.to_parquet(output_dir, index=False)
     print(f"{output_dir} features created and saved successfully: {df.shape}, {label}") 
 
-
-def run_api_feature_engine_pipeline():
-    """ This function runs the API feature engineering pipeline by calling the necessary functions to build 
-    and save the product, brand, and seller features.
-    """
-    if not Processed_data_dir.exists():
-        raise FileNotFoundError(
-            f"The directory {Processed_data_dir.parent} does not exist."  
-            "Please create the directory before running the pipeline.")    
-    
-    API_feature_dir.parent.mkdir(parents=True, exist_ok=True) 
-
-    df = pd.read_parquet(Processed_data_dir)
-    product_features = build_product_features(df)
-    brand_features = build_brand_featrures(product_features)
-    seller_features = build_seller_features(df)
-    save_features(product_features, API_feature_dir/ "product_features.parquet", "Product")
-    save_features(brand_features, API_feature_dir/ "brand_features.parquet", "Brand")
-    save_features(seller_features, API_feature_dir/ "seller_features.parquet", "Seller")
-    
-    return{"product": product_features,"brand" : brand_features, "seller": seller_features} 
-     
-
-if __name__ == "__main__":
-    run_api_feature_engine_pipeline()
-    print("API feature engineering pipeline completed successfully.")   
+ 

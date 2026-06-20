@@ -78,39 +78,4 @@ def build_brand_timeseries(df: pd.DataFrame) -> pd.DataFrame:
     brand_timeseries.sort_values(["brand", "day"], ascending=[True, True]).reset_index(drop=True, inplace=True) 
 
     return brand_timeseries
-
  
-def run_forecasting_features_pipeline(input_dir:Path = Data_dir, output_dir:Path = Forecast_data_dir) -> dict[str, pd.DataFrame]:
-
-    """ This function runs the forecasting features pipeline by calling the build_category_timeseries, build_brand_timeseries, 
-    """
-
-    if not input_dir.exists():
-        raise FileNotFoundError(
-            f"The directory {input_dir.parent} does not exist."  
-            "Please create the directory before running the pipeline.")
-    
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    df = pd.read_parquet(input_dir)
-
-    category_timeseries = build_category_timeseries(df)
-    brand_timeseries = build_brand_timeseries(df)
-      
-    # Save the forecasting features to parquet files
-    output_paths = {
-        "category_timeseries": output_dir / "category_timeseries.parquet",
-        "brand_timeseries": output_dir / "brand_timeseries.parquet", 
-    }
- 
-    category_timeseries.to_parquet(output_paths["category_timeseries"], index=False)
-    brand_timeseries.to_parquet(output_paths["brand_timeseries"], index=False)
-    
-    print(f"Forecasting features created and saved successfully: {output_paths}")
-
-    return {"category_timeseries": category_timeseries, "brand_timeseries": brand_timeseries}
-
-
-if __name__ == "__main__":
-    run_forecasting_features_pipeline()
-    print("API forecasting features pipeline executed successfully.") 
