@@ -17,7 +17,7 @@ PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def run_tranfrom_pipeline() -> dict:
+def run_transform_pipeline() -> dict:
     """
     Runs the ADIP Intelligence transformers pipeline layer.
 
@@ -98,4 +98,4 @@ def run_tranfrom_pipeline() -> dict:
 
 
 if __name__ == "__main__":
-    run_tranfrom_pipeline()
+    run_transform_pipeline()
