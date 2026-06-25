@@ -12,7 +12,7 @@ from intelligence_system.features.scraper_features import normalize_scraper_data
 from intelligence_system.schemas.schemas import SCRAPER_CATEGORY_TIMESERIES, SCRAPER_BRAND_TIMESERIES  
 
 Data_dir = Path("data/processed/scraper.parquet")
-Forecast_data_dir = Path("data/forecasting/scraper")
+Forecast_data_dir = Path("data/timeseries/scraper")
 
 
 def prepare_timeseries_input(df: pd.DataFrame) -> pd.DataFrame:

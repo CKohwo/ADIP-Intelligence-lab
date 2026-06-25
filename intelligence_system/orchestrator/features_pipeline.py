@@ -15,7 +15,7 @@ API_Features_data_dir = Path("data/features/api_ingest")
 SCRAPER_Transformed_data_dir = Path("data/transformed/scraper.parquet") 
 SCRAPER_Features_data_dir = Path("data/features/scraper")
 
-Forecasting_data_dir = Path("data/forecasting")
+Forecasting_data_dir = Path("data/timeseries")
 
 for directory in [API_Features_data_dir, SCRAPER_Features_data_dir, Forecasting_data_dir]:
     directory.mkdir(parents=True, exist_ok=True)

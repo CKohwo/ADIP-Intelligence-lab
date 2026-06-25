@@ -12,7 +12,7 @@ from intelligence_system.tools.normalizer import clean_brand_value
 from intelligence_system.schemas.schemas import PRODUCT_TIMESERIES_COLUMNS, BRAND_TIMESERIES_COLUMNS, SELLERS_TIMESERIES_COLUMNS
 
 Processed_data_dir = Path("data/transformed/api_ingest.parquet")
-Api_forecast_dir = Path("data/forecasting/api_ingest") 
+Api_forecast_dir = Path("data/timeseries/api_ingest") 
 
 def prepare_timeseries_input(df: pd.DataFrame) -> pd.DataFrame:
     """
