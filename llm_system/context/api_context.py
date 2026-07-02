@@ -149,7 +149,7 @@ def build_seller_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n
     return seller_context
 
 
-def build_api_context(top_n: int = 10) -> Dict[str, Any]:
+def build_api_context(top_n: int = 20) -> Dict[str, Any]:
 
     features = load_api_features()
     timeseries = load_api_timeseries()
