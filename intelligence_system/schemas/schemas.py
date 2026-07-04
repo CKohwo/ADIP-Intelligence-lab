@@ -124,7 +124,7 @@ SCRAPER_CATEGORY_TIMESERIES = [
 ]
 
 SCRAPER_BRAND_TIMESERIES = [
-    "day", "brand", "listing_volume",
+    "day",  "brand", "listing_volume",
     "product_variety_count", "category_count", 
     "median_price", "avg_rating", "rating_coverage_pct",
     "source"

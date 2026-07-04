@@ -56,27 +56,31 @@ def get_recent_activity(df: pd.DataFrame,entity_col: str,rows_per_entity: int = 
 # ==========================================================
  
 def build_category_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n: int = 20) -> Dict[str, Any]:
+    
+    category_context = {
+        "largest_category": features.nlargest(top_n, "listing_volume")[
+            ["category", "listing_volume", "brand_count", "avg_rating"]
+        ].fillna("Unknown").to_dict("records"),
 
-    return {"largest_category": features.nlargest(top_n, "listing_volume") 
-           [["category", "listing_volume", "brand_count", "avg_rating"]]
-           .to_dict("records"),
- 
         "most_diverse_category": features.nlargest(top_n, "product_variety_count")[
-            ["category", "product_variety_count", "brand_count"] 
-        ].to_dict("records"),
+            ["category", "product_variety_count", "brand_count"]
+        ].fillna("Unknown").to_dict("records"),
 
         "premium_category": features.nlargest(top_n, "median_price")[
             ["category", "median_price", "price_tier", "avg_rating"]
-        ].to_dict("records"),
+        ].fillna("Unknown").to_dict("records"),
 
-        "recent_product_activity": get_recent_activity( timeseries, "category"),
-                
+        "recent_category_activity": get_recent_activity(timeseries, "category"),
+
         "market_summary": {
             "total_categories": int(features.shape[0]),
             "average_listing_volume": round(features["listing_volume"].mean(), 2),
             "average_category_price": round(features["median_price"].mean(), 2),
-            "average_category_rating": round(features["avg_rating"].mean(), 2)} 
+            "average_category_rating": round(features["avg_rating"].mean(), 2),
+        }
     }
+
+    return category_context 
 
 
 # ==========================================================
@@ -85,9 +89,9 @@ def build_category_context(features: pd.DataFrame, timeseries: pd.DataFrame, top
 
 def build_brand_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n: int = 20) -> Dict[str, Any]:
 
-    return {
+    brand_context = {
         "top_rated_brands": features.nlargest(top_n, "avg_rating")[
-            ["brand", "avg_rating", "category"] 
+            ["brand", "avg_rating", "category_count"] 
         ].to_dict("records"),
 
         "most_diverse_brands": features.nlargest(top_n, "product_variety_count")[
@@ -111,3 +115,24 @@ def build_brand_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n:
             "average_brand_price": round(features["median_price"].mean(),2),
             "average_listing_per_brand": round(features["listing_volume"].mean(),2)} 
     }
+
+
+    return brand_context
+
+
+def build_scraper_context(top_n: int = 20) -> Dict[str, Any]:
+
+    features = load_features()
+    timeseries = load_timeseries()
+
+    return {
+
+        "domain": "api_ingest",
+
+        "generated_at": pd.Timestamp.utcnow().isoformat(),
+
+        "category_context": build_category_context(features["category"],timeseries["category"], top_n),
+             
+        "brand_context": build_brand_context( features["brand"], timeseries["brand"], top_n),
+          
+    }    

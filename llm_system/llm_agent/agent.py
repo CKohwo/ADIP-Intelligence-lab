@@ -10,29 +10,16 @@ import os
 import time
 from pathlib import Path
 
-from openai import OpenAI 
+from google import genai 
 from dotenv import load_dotenv
 
-CACHE_DIR = Path("data/llm_insight/cache")
+CACHE_DIR = Path("data/llm_insight/ai_insight_cache")
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
 
-def generate_api():
-    """
-    Retrieve the API key and generate an OpenAI API client for Gemini.
-    """
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY environment variable not set.")   
-
-    agent = OpenAI(
-            api_key= api_key,
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/" 
-        )
-
-    return agent
-
+AGENT = genai.Client(api_key=api_key) 
 
 def generate_llm_insight(prompt: str, cache_key: str = None, ttl: int = 14400) -> dict:
     """
@@ -45,24 +32,26 @@ def generate_llm_insight(prompt: str, cache_key: str = None, ttl: int = 14400) -
         if cache_path.exists():
             age = time.time() - cache_path.stat().st_mtime
             if age <= ttl:
+                print(f"[CACHE HIT] {cache_key}")
                 return json.loads(cache_path.read_text())
 
     # Call API
-    agent = generate_api()
-
-    response = agent.chat.completions.create(
+    print(f"[API CALL] cache_key: {cache_key}, model:gemini-3.5-flash")
+    response = AGENT.models.generate_content(
         model="gemini-3.5-flash",
-        messages=[
-            {"role": "system", "content": "Return only valid JSON."},
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.2,
-        response_format={"type": "json_object"},
+        contents = prompt,
+        config = genai.types.GenerateContentConfig(
+            temperature=0.2,
+            response_mime_type="application/json",
+        )
     )
 
+    raw = response.text
+
     try:
-        result = json.loads(response.choices[0].message.content)
-    except json.JSONDecodeError:
+        result = json.loads(raw)
+    except json.JSONDecodeError as e:
+        print(f"[ERROR] Failed to parse JSON from LLM response: {e}")
         raise RuntimeError("Invalid JSON response from LLM.")
 
 
@@ -70,5 +59,6 @@ def generate_llm_insight(prompt: str, cache_key: str = None, ttl: int = 14400) -
     if cache_key:
         cache_path = CACHE_DIR / f"{cache_key}.json"
         cache_path.write_text(json.dumps(result, indent=2))
+        print(f"[CACHE WRITE] {cache_key} -> {cache_path}")
 
     return result

@@ -71,11 +71,11 @@ def build_product_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_
            [["product_name", "brand", "avg_rating", "total_rating_count"]]
            .to_dict("records"),
  
-        "most_observed_products": features.nlarges(top_n, "observation_count")
+        "most_observed_products": features.nlargest(top_n, "observation_count")
         [["product_name", "brand", "observation_count", "days_active"]]
         .to_dict("records"),
  
-        "highest_priced_products":features.nlargets(top_n, "current_price")
+        "highest_priced_products":features.nlargest(top_n, "current_price")
         [["product_name", "brand", "current_price", "avg_rating"]]
         .to_dict("records"),
  

@@ -1,0 +1,84 @@
+{
+  "role": "category_intelligence",
+  "executive_summary": "The marketplace is highly polarized, dominated by two high-volume categories\u2014phones and laptops\u2014which together account for over 99% of total listing volume. Laptops represent the premium segment with a High price tier and a median price of 450,000.0, while phones represent a highly competitive, diverse Mid-tier market with 99 distinct brands. Conversely, the gaming category is an underserved, low-volume niche characterized by zero brand representation but boasting the highest customer satisfaction rating (4.1583), signaling an untapped market opportunity.",
+  "key_findings": [
+    {
+      "finding": "Phones represent the most saturated and highly competitive category in the marketplace.",
+      "evidence": "Phones have the highest listing volume (83,815), the largest brand count (99), and the greatest product variety (2,811 unique products).",
+      "confidence": "High",
+      "confidence_reason": "The finding is directly supported by multiple consistent metrics across the largest and most diverse category datasets."
+    },
+    {
+      "finding": "The gaming category is completely unbranded yet yields the highest customer satisfaction.",
+      "evidence": "Gaming has 0 brands listed across 1,526 total listings and 24 unique products, yet it maintains the highest average rating of 4.1583.",
+      "confidence": "High",
+      "confidence_reason": "Data from largest, most diverse, and premium categories consistently show 0 brands and a 4.1583 average rating."
+    },
+    {
+      "finding": "Laptops command a premium pricing position while maintaining high volume.",
+      "evidence": "Laptops are classified in the 'High' price tier with a median price of 450,000.0 and a substantial listing volume of 82,934.",
+      "confidence": "High",
+      "confidence_reason": "Directly supported by the premium and largest category datasets."
+    }
+  ],
+  "opportunities": [
+    {
+      "opportunity": "Introduce private-label or branded gaming products to capture market share.",
+      "rationale": "The gaming category currently has 0 brands but has the highest average rating (4.1583). Introducing structured brands can capture high-satisfaction demand that is currently unbranded.",
+      "affected_categories": [
+        "gaming"
+      ]
+    },
+    {
+      "opportunity": "Develop premium cross-selling and bundling strategies for laptop buyers.",
+      "rationale": "Laptops represent a high-volume (82,934 listings) and high-value (450,000.0 median price) segment, indicating a consumer base with high purchasing power and willingness to invest in premium tech.",
+      "affected_categories": [
+        "laptops"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Severe margin erosion and visibility loss for new sellers in the phones category.",
+      "rationale": "With 99 brands and 2,811 unique products, the phones category is extremely crowded, making it difficult for new entrants to gain organic visibility without aggressive pricing or high ad spend.",
+      "affected_categories": [
+        "phones"
+      ]
+    },
+    {
+      "risk": "Supply contraction and shrinking variety in the gaming category.",
+      "rationale": "Recent daily activity shows gaming listing volume dropped from 18 to 13, and product variety dropped from 17 to 12 between April 11 and April 20, 2026, indicating potential inventory or supply chain issues.",
+      "affected_categories": [
+        "gaming"
+      ]
+    }
+  ],
+  "entity_spotlights": {
+    "largest_categories": {
+      "phones": {
+        "listing_volume": 83815,
+        "brand_count": 99,
+        "avg_rating": 4.036514021273657
+      },
+      "laptops": {
+        "listing_volume": 82934,
+        "brand_count": 28,
+        "avg_rating": 4.080592398427261
+      }
+    },
+    "premium_category": {
+      "laptops": {
+        "median_price": 450000.0,
+        "price_tier": "High",
+        "avg_rating": 4.080592398427261
+      }
+    },
+    "most_competitive_category": {
+      "phones": {
+        "brand_count": 99,
+        "product_variety_count": 2811,
+        "listing_volume": 83815
+      }
+    }
+  }
+}
