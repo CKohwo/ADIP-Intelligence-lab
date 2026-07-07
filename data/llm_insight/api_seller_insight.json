@@ -1,0 +1,49 @@
+{
+  "role": "seller_intelligence",
+  "executive_summary": "The seller landscape is characterized by a severe trust deficit and high operational instability. With a market-wide average seller rating of just 0.11 across 130 sellers, the largest players by product volume fail to secure positive customer feedback (averaging 0.0 ratings). Operational activity is highly volatile, marked by extreme fluctuations in active product listings, suggesting supply chain or catalog management challenges.",
+  "key_findings": [
+    {
+      "finding": "Widespread trust deficit across high-volume sellers.",
+      "evidence": "The five largest sellers (Add Moore with 66 products, Highspeed with 55, Nachi Ventures with 54, Royal Ventures with 53, and More Ventures with 51) all hold an average rating of 0.0.",
+      "confidence": "High",
+      "confidence_reason": "Directly supported by the 'largest_sellers' dataset showing 0.0 average ratings for all top five sellers."
+    },
+    {
+      "finding": "Statistical insignificance of top-rated sellers, except for one outlier.",
+      "evidence": "While KACHISON and PlusMore.ng lead with 5.0 ratings, they only have 1.0 total rating count each. 'jagGed inC' is the only seller with a substantial feedback loop, holding 85.0 total ratings, though its average rating is low at 1.49.",
+      "confidence": "High",
+      "confidence_reason": "Verified by the 'top_rated_sellers' table which lists rating counts alongside average ratings."
+    },
+    {
+      "finding": "Extreme short-term listing volatility among active sellers.",
+      "evidence": "PEAKEXCEL TECHNOLOGIES went from 7 products on 2026-05-21 to 29 products on 2026-07-01, then plummeted to 1 product on 2026-07-06. Keysource technology fluctuated from 3 products (2026-06-06) to 19 products (2026-06-16) and back to 3 products (2026-07-06).",
+      "confidence": "High",
+      "confidence_reason": "Chronological tracking of product counts in the 'recent_seller_activity' dataset."
+    }
+  ],
+  "opportunities": [
+    "Market Share Capture: A new or existing seller maintaining a basic positive rating (e.g., >3.0) can easily differentiate themselves in a market where the average rating is 0.11.",
+    "Operational Stabilization: Helping high-volume sellers like Add Moore or Nachi Ventures establish feedback collection mechanisms to transition from 0.0 ratings to active, positive profiles."
+  ],
+  "risks": [
+    "Severe Customer Dissatisfaction or Disengagement: The overall average rating of 0.11 across 130 sellers indicates either a broken feedback loop or systemic fulfillment issues.",
+    "Inventory and Supply Chain Instability: Rapid drops in active product counts (e.g., PEAKEXCEL dropping 96% of its listings in 5 days) point to severe stockouts or catalog management errors."
+  ],
+  "entity_spotlights": {
+    "top_seller": {
+      "seller_name": "jagGed inC",
+      "metric_profile": "85.0 total ratings (highest in market), 1.49 average rating, active product count of 5 to 7 in recent periods.",
+      "strategic_value": "The only seller with a validated, high-volume customer feedback loop, representing the most active consumer-facing footprint despite low satisfaction."
+    },
+    "most_expanding": {
+      "seller_name": "Royal Ventures",
+      "metric_profile": "53 total products, 18 brands. Recent activity shows a surge from 3 active products on 2026-05-21 to 19 active products on 2026-06-26.",
+      "strategic_value": "Demonstrates a capacity to scale active listings rapidly, making them a key volume driver if they can resolve their 0.0 rating status."
+    },
+    "unstable": {
+      "seller_name": "PEAKEXCEL TECHNOLOGIES",
+      "metric_profile": "37 total products. Recent active listings spiked to 29 on 2026-07-01 but crashed to 1 on 2026-07-06.",
+      "strategic_value": "Highlights extreme operational or supply chain vulnerability, requiring immediate catalog stabilization."
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "role": "brand_intelligence",
+  "executive_summary": "The brand landscape is highly fragmented with 166 total brands and is characterized by an extremely low market-wide average brand rating of 0.09. Unbranded or 'Unknown' entities dominate market share with 323 products, while established global brands like HP, Logitech, Lenovo, and Dell maintain significant assortments but suffer from severely depressed customer ratings (all under 0.31). Premium brands command high median prices up to 950,000.0 but suffer from a complete lack of rating engagement, presenting a critical trust gap in the high-end segment.",
+  "key_findings": [
+    {
+      "finding": "Severe rating depression and lack of customer engagement across major global brands.",
+      "evidence": "The market average brand rating is 0.09. Among the largest brands, Dell leads with a low 0.30 average rating, followed by HP at 0.225, Lenovo at 0.148, and Logitech at 0.038, while Apple and ASUS sit at 0.0.",
+      "confidence": "High",
+      "confidence_reason": "Directly supported by the 'largest_brands' and 'market_summary' datasets."
+    },
+    {
+      "finding": "Unbranded market dominance poses a significant threat to brand equity on the platform.",
+      "evidence": "The 'Unknown' brand category represents the largest market share with 323 products (nearly five times larger than the next largest brand, HP, which has 66) but has a low average rating of 0.080.",
+      "confidence": "High",
+      "confidence_reason": "Supported by product count and rating data in the 'largest_brands' section."
+    },
+    {
+      "finding": "Premium brands command high prices but fail to establish verified customer trust.",
+      "evidence": "Top premium brands such as Insta360 (median price 950,000.0), Monitor (795,000.0), Sennheiser (550,000.0), and Ohayo (550,000.0) all register an average rating of 0.0.",
+      "confidence": "High",
+      "confidence_reason": "Directly extracted from the 'premium_brands' dataset."
+    }
+  ],
+  "opportunities": [
+    {
+      "opportunity": "Quality-focused market disruption for established brands.",
+      "description": "With a market average rating of only 0.09, an established brand like Dell (currently leading major brands with a 0.30 rating) or HP (0.225) has a significant opportunity to capture market share from 'Unknown' (323 products) by actively marketing quality assurance and driving positive review generation."
+    },
+    {
+      "opportunity": "Trust building for premium brands to justify high price points.",
+      "description": "Premium brands like Insta360 and Sennheiser command high median prices but have 0.0 ratings. Implementing post-purchase review campaigns to establish rating coverage will help justify these premium price points and convert hesitant high-intent buyers."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Platform-wide trust deficit due to dominant low-rated unbranded products.",
+      "description": "The dominance of 'Unknown' branded products (323 products, 0.08 rating) risks creating a platform-wide trust deficit, where poor experiences with unbranded items discourage repeat purchases across all brands."
+    },
+    {
+      "risk": "Severe lack of feedback loops for newly active brands.",
+      "description": "Recent brand activity data shows that almost all active brands (e.g., Maxell, Havit, Cheerdots, Razer) are operating with 0% rating coverage and 0.0 ratings, indicating that brands are selling in a blind spot without customer feedback."
+    }
+  ],
+  "entity_spotlights": {
+    "top_brand": {
+      "name": "Dell",
+      "description": "Dell is the top-performing major brand, maintaining the highest average rating (0.30) among the top five largest brands by product count.",
+      "metrics": {
+        "avg_rating": 0.3,
+        "product_count": 32,
+        "total_rating_count": 2.0
+      }
+    },
+    "fastest_rising": {
+      "name": "Pd100W",
+      "description": "Pd100W shows strong rating performance relative to the market, holding an average rating of 0.55 across 18 historical ratings, and registering perfect 5.0 ratings during active days in May 2026.",
+      "metrics": {
+        "avg_rating": 0.5555555555555556,
+        "total_rating_count": 18.0,
+        "recent_activity_rating": 5.0
+      }
+    },
+    "under_pressure": {
+      "name": "Logitech",
+      "description": "Despite being the third-largest brand with 35 products, Logitech is under severe pressure with an extremely low average rating of 0.038, indicating a critical gap in product satisfaction or customer engagement.",
+      "metrics": {
+        "product_count": 35,
+        "avg_rating": 0.03809523809523809
+      }
+    }
+  }
+}

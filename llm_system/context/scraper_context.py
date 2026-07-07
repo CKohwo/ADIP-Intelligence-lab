@@ -44,7 +44,7 @@ def load_timeseries() -> Dict[str, pd.DataFrame]:
     return assets       
 
 
-def get_recent_activity(df: pd.DataFrame,entity_col: str,rows_per_entity: int = 10)-> list[dict]:
+def get_recent_activity(df: pd.DataFrame,entity_col: str,rows_per_entity: int = 5)-> list[dict]:
     """Extract last N rows per entity from pre-computed timeseries."""
     if df.empty or entity_col not in df.columns:
         return []
@@ -55,7 +55,7 @@ def get_recent_activity(df: pd.DataFrame,entity_col: str,rows_per_entity: int = 
 # CATEGORY CONTEXT
 # ==========================================================
  
-def build_category_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n: int = 20) -> Dict[str, Any]:
+def build_category_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n: int = 10) -> Dict[str, Any]:
     
     category_context = {
         "largest_category": features.nlargest(top_n, "listing_volume")[
@@ -87,7 +87,7 @@ def build_category_context(features: pd.DataFrame, timeseries: pd.DataFrame, top
 # BRAND CONTEXT
 # ==========================================================
 
-def build_brand_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n: int = 20) -> Dict[str, Any]:
+def build_brand_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n: int = 10) -> Dict[str, Any]:
 
     brand_context = {
         "top_rated_brands": features.nlargest(top_n, "avg_rating")[
@@ -120,7 +120,7 @@ def build_brand_context(features: pd.DataFrame, timeseries: pd.DataFrame, top_n:
     return brand_context
 
 
-def build_scraper_context(top_n: int = 20) -> Dict[str, Any]:
+def build_scraper_context(top_n: int = 10) -> Dict[str, Any]:
 
     features = load_features()
     timeseries = load_timeseries()
