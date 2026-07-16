@@ -1,6 +1,6 @@
 # 🧠 ADIP Intelligence Lab
 
-**Automated Data Intelligence Platform (ADIP) — Intelligence Engine**
+**Automated Data Intelligence Platform (ADIP) — AI Intelligence Engine**
 
 ---
 
@@ -15,7 +15,9 @@ Unlike traditional analytics projects that stop at dashboards or descriptive sta
 This repository emphasizes production-oriented software engineering while serving as a learning-first exploration of modern AI systems architecture.
 
 ---
+<img width="1436" height="840" alt="mermaid (5)" src="https://github.com/user-attachments/assets/d4b12def-8eaf-4809-a126-2a463cf168cb" />
 
+---
 # What This Repository Does
 
 The ADIP Intelligence Lab performs the following responsibilities:
@@ -238,6 +240,23 @@ Prompt Builders
       ▼
 LLM Insight Generation
 ```
+9. FastAPI Intelligence Service
+
+The FastAPI service is the official interface to the ADIP Intelligence Engine.
+
+Rather than allowing applications to access feature stores or Parquet datasets directly, FastAPI exposes standardized REST endpoints that serve engineered datasets, time-series data, cached AI insights, and pipeline execution.
+
+Responsibilities include:
+
+Serving feature-engineered datasets
+Serving historical time-series datasets
+Serving AI-generated insight reports
+Health monitoring
+Pipeline execution endpoints
+Stable API contract for frontend applications
+
+The service separates the intelligence backend from presentation layers, allowing multiple clients to consume the same intelligence engine without duplication.
+
 
 Each stage remains independently executable while the master orchestrator provides complete end-to-end automation.
 
@@ -262,6 +281,12 @@ ADIP-Intelligence-lab/
 │   ├── generators/
 │   ├── llm_agent/
 │   └── orchestrator/
+│
+├── Fastapi/
+│   ├── routes/
+│   ├── services/
+│   ├── app.py
+│   └── config
 │
 ├── data/
 │   ├── transformed/
@@ -308,17 +333,17 @@ Completed components include:
 * ✔ Prompt Engineering Layer
 * ✔ AI Insight Engine
 * ✔ Multi-Model LLM Agent
+* ✔ FastAPI Intelligence Service
 * ✔ Master Orchestrator
 
 ---
 
 ## 🚧 Next Phase
 
-**Phase 3 — Intelligence Service & User Interface**
+**Phase 3 — Taipy Intelligence Application**
 
-Upcoming work focuses on:
+Phase 3 focuses on transforming the ADIP Intelligence Engine into a complete user-facing intelligence platform:
 
-* FastAPI service layer
 * Taipy web application
 * interactive intelligence dashboards
 * API-first architecture
