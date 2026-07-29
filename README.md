@@ -1,107 +1,360 @@
 # 🧠 ADIP Intelligence Lab
 
-**Automated Data Intelligence Platform (ADIP) — Intelligence Layer**
+**Automated Data Intelligence Platform (ADIP) — AI Intelligence Engine**
 
 ---
 
-## Overview
+# Overview
 
-The **ADIP Intelligence Lab** is the core intelligence engine of the Automated Data Intelligence Portal (ADIP).
+The **ADIP Intelligence Lab** is the intelligence engine powering the Automated Data Intelligence Platform (ADIP).
 
-This repository is responsible for transforming *clean, ingested data* into **actionable intelligence** — insights, forecasts, and recommendations — through a modular, automated, and production-oriented analytics system. While the ingestion layer focuses on *collecting and standardizing data*, the Intelligence Lab focuses on *understanding it*.
+It transforms structured datasets into AI-generated business intelligence through a modular pipeline consisting of transformation, feature engineering, context engineering, and Large Language Model (LLM) reasoning.
 
-This project is intentionally built as a **learning-first, systems-engineering lab** alongside real-world implementation.
+Unlike traditional analytics projects that stop at dashboards or descriptive statistics, ADIP is designed as an autonomous intelligence system capable of producing structured narratives, market analysis, and decision-ready insights.
+
+This repository emphasizes production-oriented software engineering while serving as a learning-first exploration of modern AI systems architecture.
+
+---
+<img width="1436" height="840" alt="mermaid (5)" src="https://github.com/user-attachments/assets/d4b12def-8eaf-4809-a126-2a463cf168cb" />
+
+---
+# What This Repository Does
+
+The ADIP Intelligence Lab performs the following responsibilities:
+
+* Consumes datasets produced by the ADIP Ingestion Lab
+* Transforms raw records into standardized analytical datasets
+* Engineers domain-specific feature stores
+* Builds historical time-series datasets
+* Constructs structured AI contexts from engineered data
+* Generates business intelligence using Large Language Models
+* Produces machine-readable JSON insight reports
+* Exposes intelligence through FastAPI for downstream applications
+
+The complete intelligence pipeline is:
+
+``` 
+Raw Data
+      │
+      ▼
+Transformation Layer
+      │
+      ▼
+Feature Engineering
+      │
+      ▼
+Time-Series Construction
+      │
+      ▼
+Context Builders
+      │
+      ▼
+Prompt Engineering
+      │
+      ▼
+LLM Insight Engine
+      │
+      ▼
+Structured JSON Intelligence
+      │
+      ▼
+FastAPI
+      │
+      ▼
+Dashboard / External Applications
+```
 
 ---
 
-## What This Repository Does
+# Intelligence Architecture
 
-The ADIP Intelligence Lab:
+The Intelligence Lab is organized into independent modules that each have a single responsibility.
 
-* Converts ingestion outputs into analytics-ready data models
-* Engineers meaningful features from raw signals
-* Detects trends, anomalies, and behavioral shifts automatically
-* Forecasts future patterns using time-series models
-* Generates human-readable insights and recommendations
-* Runs autonomously through scheduled and CI/CD-driven workflows
+## 1. Transformation Pipeline
 
-In short:
+Transforms normalized ingestion outputs into analytics-ready datasets.
 
-> **Raw data → Structured understanding → Predictive insight → Automated narrative**
+Responsibilities:
 
----
+* schema normalization
+* datatype validation
+* missing value handling
+* domain standardization
 
-## Intelligence Modules
-
-The system is composed of six tightly integrated modules:
-
-### 1. Data Modeling Layer
-
-Standardizes schemas, enforces typing, normalizes time, and prepares analytics-ready tables.
-
-### 2. Feature Engineering Layer
-
-Extracts signal from noise using rolling statistics, lag features, ratios, and domain-aware metrics.
-
-### 3. Insight Engine
-
-Automatically detects trends, anomalies, correlations, and performance shifts.
-
-### 4. Forecasting Engine
-
-Predicts future behavior using time-series models such as Prophet and ARIMA.
-
-### 5. Narrative & Recommendation Engine
-
-Translates analytics into human-readable summaries, alerts, and decision guidance.
-
-### 6. Automation & Orchestration Layer
-
-Ensures the intelligence system runs autonomously via scheduled jobs and CI/CD workflows.
-
----
-
-## Repository Structure (Planned)
+Outputs:
 
 ```
-adip-intelligence-lab/
-├── dis/
-│   ├── models/        # Data schemas and analytical models
-│   ├── validators/    # Schema enforcement and data validation
-│   ├── features/      # Feature engineering logic
-│   ├── insights/      # Pattern detection and analytics
-│   ├── forecasts/     # Time-series forecasting models
-│   └── narratives/    # Insight summaries and recommendations
-├── tests/             # Unit and integration tests
-├── docs/              # Design notes and learning documentation
-├── workflows/         # CI/CD and automation logic
+data/transformed/
+```
+
+---
+
+## 2. Feature Engineering Pipeline
+
+Creates domain-specific analytical feature stores.
+
+Examples include:
+
+* Product Features
+* Brand Features
+* Seller Features
+* Category Features
+
+Outputs:
+
+```
+data/features/
+```
+
+---
+
+## 3. Time-Series Pipeline
+
+Constructs historical datasets that preserve temporal behaviour.
+
+Examples include:
+
+* Product Timeseries
+* Brand Timeseries
+* Seller Timeseries
+* Category Timeseries
+
+Outputs:
+
+```
+data/timeseries/
+```
+
+---
+
+## 4. Context Engineering Layer
+
+Consumes engineered datasets without recomputing business metrics.
+
+Responsibilities include:
+
+* loading feature stores
+* loading time-series datasets
+* selecting relevant entities
+* compressing structured information
+* preparing LLM-ready context
+
+Outputs:
+
+```
+Python dictionaries
+```
+
+designed specifically for AI reasoning.
+
+---
+
+## 5. Prompt Engineering Layer
+
+Defines role-specific prompt templates that guide AI reasoning.
+
+Separate prompt families exist for:
+
+* Product Intelligence
+* Brand Intelligence
+* Seller Intelligence
+* Category Intelligence
+
+Each prompt:
+
+* consumes structured context
+* enforces JSON output
+* minimizes hallucination
+* constrains reasoning to supplied evidence
+
+---
+
+## 6. AI Insight Engine
+
+The AI Insight Engine is the reasoning component of ADIP.
+
+Rather than writing additional rule-based analytics after feature engineering, engineered datasets are interpreted directly by Large Language Models.
+
+Responsibilities include:
+
+* business intelligence generation
+* trend interpretation
+* opportunity detection
+* risk identification
+* executive summaries
+* structured recommendations
+
+Outputs:
+
+```
+data/llm_insight/
+```
+
+---
+
+## 7. LLM Agent
+
+Provides resilient interaction with external AI providers.
+
+Current capabilities include:
+
+* multi-model fallback
+* automatic retry handling
+* JSON-only responses
+* response caching
+* provider abstraction
+
+Current fallback chain:
+
+```
+Gemini 3.5 Flash
+        ↓
+Gemini 2.5 Flash
+        ↓
+Gemini 1.5 Flash
+```
+
+This design significantly improves reliability when free-tier quota limits or temporary model unavailability occur.
+
+---
+
+## 8. Master Orchestrator
+
+Coordinates the complete intelligence workflow.
+
+``` 
+Data Manager
+      │
+      ▼
+Transformation Pipeline
+      │
+      ▼
+Feature Engineering Pipeline
+      │
+      ▼
+Context Builders
+      │
+      ▼
+Prompt Builders
+      │
+      ▼
+LLM Insight Generation
+```
+9. FastAPI Intelligence Service
+
+The FastAPI service is the official interface to the ADIP Intelligence Engine.
+
+Rather than allowing applications to access feature stores or Parquet datasets directly, FastAPI exposes standardized REST endpoints that serve engineered datasets, time-series data, cached AI insights, and pipeline execution.
+
+Responsibilities include:
+
+Serving feature-engineered datasets
+Serving historical time-series datasets
+Serving AI-generated insight reports
+Health monitoring
+Pipeline execution endpoints
+Stable API contract for frontend applications
+
+The service separates the intelligence backend from presentation layers, allowing multiple clients to consume the same intelligence engine without duplication.
+
+
+Each stage remains independently executable while the master orchestrator provides complete end-to-end automation.
+
+---
+
+# Repository Structure
+
+```text
+ADIP-Intelligence-lab/
+
+├── intelligence_system/
+│   ├── transform/
+│   ├── features/
+│   ├── forecasting/
+│   ├── orchestrator/
+│   ├── schemas/
+│   └── tools/
+│
+├── llm_system/
+│   ├── context/
+│   ├── prompts/
+│   ├── generators/
+│   ├── llm_agent/
+│   └── orchestrator/
+│
+├── Fastapi/
+│   ├── routes/
+│   ├── services/
+│   ├── app.py
+│   └── config
+│
+├── data/
+│   ├── transformed/
+│   ├── features/
+│   ├── timeseries/
+│   └── llm_insight/
+│
+├── Master_orchestrator/
+│   ├─ master_orchestrator.py 
+│
+├── tests/
+├── docs/
 └── README.md
 ```
 
 ---
 
-## Learning Objective
+# Engineering Principles
 
-This repository is not only a production system but also a **technical growth artifact**.
+The ADIP Intelligence Lab follows several guiding principles:
 
-It is designed to:
-
-* Build deep intuition in data modeling and analytics
-* Develop systems-level thinking for intelligence pipelines
-* Demonstrate end-to-end automation capability
-* Serve as a portfolio-grade example of intelligent data infrastructure
-
----
-
-## Status
-
-🚧 **Phase 2 — Data Intelligence Service (Active Development)**
-
-Modules are implemented iteratively and integrated continuously with the ADIP ingestion layer.
+* Modular architecture
+* Loose coupling
+* Separation of concerns
+* Production-oriented engineering
+* Context-first AI reasoning
+* LLM consumes engineered data rather than raw datasets
+* Vendor agnostic AI integration
+* Reusable intelligence components
 
 ---
 
-## Author
-**Charles Onokohwomo** 
+# Current Status
 
-Built and maintained as part of the **Automated Data Intelligence Portal (ADIP)** initiative.
+## ✅ Phase 2 Complete
+
+Completed components include:
+
+* ✔ Data Manager
+* ✔ Transformation Pipeline
+* ✔ Feature Engineering Pipeline
+* ✔ Time-Series Pipeline
+* ✔ Context Engineering Layer
+* ✔ Prompt Engineering Layer
+* ✔ AI Insight Engine
+* ✔ Multi-Model LLM Agent
+* ✔ FastAPI Intelligence Service
+* ✔ Master Orchestrator
+
+---
+
+## 🚧 Next Phase
+
+**Phase 3 — Taipy Intelligence Application**
+
+Phase 3 focuses on transforming the ADIP Intelligence Engine into a complete user-facing intelligence platform:
+
+* Taipy web application
+* interactive intelligence dashboards
+* API-first architecture
+* production deployment
+
+---
+
+# Author
+
+**Charles Onokohwomo**
+
+*Engineering Autonomous Intelligence Systems*
+
+Part of the **Automated Data Intelligence Platform (ADIP)** initiative.
