@@ -8,19 +8,19 @@ from llm_system.llm_agent.agents import generate_llm_insight
 def generate_product_insight(top_n: int = 10) -> dict:
     context = build_api_context(top_n=top_n)["product_context"]
     prompt = build_prompt(PRODUCT_PROMPT, context)
-    return generate_llm_insight(prompt, cache_key="api_product_insight", ttl=14400)
+    return generate_llm_insight(prompt, cache_key="product_insight", ttl=14400)
 
 
 def generate_brand_insight(top_n: int = 10) -> dict:
     context = build_api_context(top_n=top_n)["brand_context"]
     prompt = build_prompt(BRAND_PROMPT, context)
-    return generate_llm_insight(prompt, cache_key="api_brand_insight", ttl=14400)
+    return generate_llm_insight(prompt, cache_key="brand_insight", ttl=14400)
 
 
 def generate_seller_insight(top_n: int = 10) -> dict:
     context = build_api_context(top_n=top_n)["seller_context"]
     prompt = build_prompt(SELLER_PROMPT, context)
-    return generate_llm_insight(prompt, cache_key="api_seller_insight", ttl=14400)
+    return generate_llm_insight(prompt, cache_key="seller_insight", ttl=14400)
 
 
 def run_api_insights(top_n: int = 10) -> dict:

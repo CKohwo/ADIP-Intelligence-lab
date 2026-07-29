@@ -24,10 +24,11 @@ def clean_df_for_json(df):
     Replacing Nan/inf with None so FastAPI can serialize Json
     """
     return df.replace([np.nan, np.inf, -np.inf], None).to_dict(orient="records")
+
+
 #------------------------- 
 # SYSTEM ENDPOINTS    
-#------------------------ 
-
+#------------------------  
 @router.get("/health")
 def health():
     """
@@ -37,31 +38,31 @@ def health():
         "api_product":{
             "features": (FEATURES_DIR/"api_ingest"/"product_features.parquet").exists(),
             "timeseries": (TIMESERIES_DIR/"api_ingest"/"product_timeseries.parquet").exists(),
-             "llm_insight": (INSIGHT_DIR/"api_product_insight.json").exists()
+             "llm_insight": (INSIGHT_DIR/"product_insight.json").exists()
         },
         "api_brand":{
             "features": (FEATURES_DIR/"api_ingest"/"brand_features.parquet").exists(),
             "timeseries": (TIMESERIES_DIR/"api_ingest"/"brand_timeseries.parquet").exists(),
-             "llm_insight": (INSIGHT_DIR/"api_brand_insight.json").exists()
+             "llm_insight": (INSIGHT_DIR/"brand_insight.json").exists()
         },
         "api_seller":{
             "features": (FEATURES_DIR/"api_ingest"/"seller_features.parquet").exists(),
             "timeseries": (TIMESERIES_DIR/"api_ingest"/"seller_timeseries.parquet").exists(),
-             "llm_insight": (INSIGHT_DIR/"api_seller_insight.json").exists()
+             "llm_insight": (INSIGHT_DIR/"seller_insight.json").exists()
         },
         "scraper_categories":{
             "features": (FEATURES_DIR/"scraper"/"category_features.parquet").exists(),
             "timeseries": (TIMESERIES_DIR/"scraper"/"category_timeseries.parquet").exists(),
-             "llm_insight": (INSIGHT_DIR/"scraper_category_insight.json").exists()
+             "llm_insight": (INSIGHT_DIR/"category_insight.json").exists()
         },
         "scraper_brand":{
             "features": (FEATURES_DIR/"scraper"/"brand_features.parquet").exists(),
             "timeseries": (TIMESERIES_DIR/"scraper"/"brand_timeseries.parquet").exists(),
-             "llm_insight": (INSIGHT_DIR/"scraper_brand_insight.json").exists()
+             "llm_insight": (INSIGHT_DIR/"sc_brand_insight.json").exists()
         },
     }        
          
-    return {"status": "healthy",
+    return {"status": "Active and Healthy endpoints",
             "service": "AUTOMATED DATA INTELLIGENCE PLATFORM (ADIP) API",
             "version": "1.0.0",
             "sources" : sources 
@@ -81,256 +82,106 @@ async def run_application(background_tasks: BackgroundTasks):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error running application: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error running application: Unknown source")
 
 
 #------------------------
-# ADIP FEATURED DATA ENDPOINTS
+# ADIP DATA ENDPOINTS
 #------------------------
 
 """
-PRODUCT FEATURES DATA ENDPOINTS - API PRODUCT FEATURES.
+PRODUCT DATA ENDPOINTS - API FEATURED, TIMESERIES & AI INSIGHTS .
 """
-@router.get("/features/products")
-def get_api_product_features():
-    """
-    GET API PRODUCT FEATURES DATA   
-    """
+@router.get("/dashboard/product")
+def get_product():
     try:
-        api_product_features = pd.read_parquet(FEATURES_DIR / "api_ingest" / "product_features.parquet") 
-        return clean_df_for_json(api_product_features)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API product features: {str(e)}")
-    
+        product_features = pd.read_parquet(FEATURES_DIR / "api_ingest" / "product_features.parquet" )
+        product_timeseries = pd.read_parquet(TIMESERIES_DIR / "api_ingest" / "product_timeseries.parquet") 
+         
+        with open (INSIGHT_DIR / "product_insight.json", "r") as file:
+            product_insight = json.load(file)
 
-"""
-BRAND FEATURES DATA ENDPOINT - 
-1. API BRAND FEATURES
-2. SCRAPED BRAND FEATURES
-"""
-
-@router.get("/features/brand/api")
-def get_api_brand_features():
-    """
-    GET API BRAND FEATURES DATA   
-    """
-    try:
-        api_brand_features = pd.read_parquet(FEATURES_DIR / "api_ingest" / "brand_features.parquet") 
-        return clean_df_for_json(api_brand_features)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API brand features: {str(e)}")
-
-
-@router.get("/features/brand/scraper")
-def get_scraped_brand_features():
-    """
-    GET SCRAPED BRAND FEATURES DATA   
-    """
-    try:
-        scraper_brand_features = pd.read_parquet(FEATURES_DIR / "scraper" / "brand_features.parquet") 
-        return clean_df_for_json(scraper_brand_features)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving scraped brand features: {str(e)}")
-
-
-"""
-SELLER FEATURES DATA ENDPOINTS - API SELLER FEATURES.
-""" 
-@router.get("/features/sellers")
-def get_api_seller_features():
-    """
-    GET API Seller FEATURES DATA   
-    """
-    try:
-        api_seller_features = pd.read_parquet(FEATURES_DIR / "api_ingest" / "seller_features.parquet") 
-        return clean_df_for_json(api_seller_features)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API seller features: {str(e)}")
-
-
-"""
-SCRAPED CATAEGORIES FEATURES DATA ENDPOINT
-""" 
-@router.get("/features/categories")
-def get_scraped_category_features():
-    """
-    GET SCRAPED CATEGORY FEATURES DATA   
-    """
-    try:
-        scraped_category_features = pd.read_parquet(FEATURES_DIR / "scraper" / "category_features.parquet") 
-        return clean_df_for_json(scraped_category_features)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving scraped category features: {str(e)}")
-
-
-#------------------------
-# ADIP TIMESERIES DATA ENDPOINTS
-#------------------------
-
-"""
-PRODUCT TIMESERIES DATA ENDPOINTS - API PRODUCT TIMESERIES.
-"""
-@router.get("/timeseries/products")
-def get_api_product_timeseries():
-    """
-    GET API PRODUCT TIMESERIES DATA   
-    """
-    try:
-        api_product_timeseries = pd.read_parquet(TIMESERIES_DIR / "api_ingest" / "product_timeseries.parquet") 
-        return clean_df_for_json(api_product_timeseries)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API product timeseries: {str(e)}")
-    
-
-"""
-BRAND TIMESERIES DATA ENDPOINT - 
-1. API BRAND TIMESERIES
-2. SCRAPED BRAND TIMESERIES
-"""
-
-@router.get("/timeseries/brands/api")
-def get_api_brand_timeseries():
-    """
-    GET API BRAND TIMESERIES DATA   
-    """
-    try:
-        api_brand_timeseries = pd.read_parquet(TIMESERIES_DIR / "api_ingest" / "brand_timeseries.parquet") 
-        return clean_df_for_json(api_brand_timeseries)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API brand timeseries: {str(e)}")
-
-
-@router.get("/timeseries/brands/scraper")
-def get_scraped_brand_timeseries():
-    """
-    GET SCRAPED BRAND TIMESERIES DATA   
-    """
-    try:
-        scraper_timeseries_features = pd.read_parquet(TIMESERIES_DIR / "scraper" / "brand_timeseries.parquet") 
-        return clean_df_for_json(scraper_timeseries_features)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving scraped brand timeseries: {str(e)}")
-
-
-"""
-SELLER TIMESERIES DATA ENDPOINTS - API SELLER TIMESERIES.
-""" 
-@router.get("/timeseries/sellers")
-def get_api_seller_timeseries():
-    """
-    GET API Seller TIMESERIES DATA   
-    """
-    try:
-        api_seller_timeseries = pd.read_parquet(TIMESERIES_DIR / "api_ingest" / "seller_timeseries.parquet") 
-        return clean_df_for_json(api_seller_timeseries)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API seller timeseries: {str(e)}")
-
-
-"""
-SCRAPED CATAEGORIES TIMESERIES DATA ENDPOINT
-""" 
-@router.get("/timeseries/categories")
-def get_scraped_category_timeseries():
-    """
-    GET SCRAPED CATEGORY TIMESERIES DATA   
-    """
-    try:
-        scraped_category_timeseries = pd.read_parquet(TIMESERIES_DIR / "scraper" / "category_timeseries.parquet") 
-        return clean_df_for_json(scraped_category_timeseries)
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving scraped category timeseries: {str(e)}")
-
-
-#-----------------------------------
-# ADIP LLM INSIGHT DATA ENDPOINTS
-#-----------------------------------
-
-"""
-PRODUCT INSIGHTS DATA ENDPOINTS - API PRODUCT INSIGHTS.
-"""
-@router.get("/llm_insight/product")
-def get_api_product_insight():
-    """
-    GET API PRODUCT INSIGHTS DATA   
-    """
-    try:
-        with open (INSIGHT_DIR / "api_product_insight.json", "r") as file:
-            return json.load(file)
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API product insights: {str(e)}")
-    
-
-"""
-BRAND INSIGHTS DATA ENDPOINT - 
-1. API BRAND INSIGHTS
-2. SCRAPED BRAND INSIGHTS
-"""
-
-@router.get("/llm_insight/brands/api")
-def get_api_brand_insights():
-    """
-    GET API BRAND INSIGHTS DATA   
-    """
-    try:
-        with open (INSIGHT_DIR / "api_brand_insight.json", "r") as file:
-            return json.load(file)
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API brand insights: {str(e)}")
-
-
-@router.get("/llm_insight/brands/scraper")
-def get_scraped_brand_insights():
-    """
-    GET SCRAPED BRAND INSIGHTS DATA   
-    """
-    try:
-        with open (INSIGHT_DIR / "scraper_brand_insight.json", "r") as file:
-            return json.load(file)
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving scraped brand insight: {str(e)}")
-
-
-"""
-API SELLER INSIGHTS DATA ENDPOINT.
-""" 
-@router.get("/llm_insight/sellers")
-def get_api_seller_insights():
-    """
-    GET API Seller INSIGHTS DATA   
-    """
-    try:
-        with open (INSIGHT_DIR / "api_seller_insight.json", "r") as file:
-            return json.load(file)
+        return {"features" : clean_df_for_json(product_features), 
+                "timeseries" : clean_df_for_json(product_timeseries),
+                "insight": product_insight
+                } 
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving API seller insight: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error retrieving API product features, timeseries & insight: Unknown source")
+    
 
 
 """
-SCRAPED CATAEGORIES INSIGHTS DATA ENDPOINT
+BRAND DATA ENDPOINTS - FEATURED, TIMESERIES & AI INSIGHTS 
+"""
+
+@router.get("/dashboard/brand")
+def get_brand(source: str):
+    if source == "api":
+        brand_features = pd.read_parquet(FEATURES_DIR / "api_ingest" / "brand_features.parquet") 
+        brand_timeseries = pd.read_parquet(TIMESERIES_DIR / "api_ingest" / "brand_timeseries.parquet") 
+         
+        with open (INSIGHT_DIR / "brand_insight.json", "r") as file:
+            brand_insight = json.load(file)
+
+        return {"features" : clean_df_for_json(brand_features), 
+                "timeseries" : clean_df_for_json(brand_timeseries),
+                "insight": brand_insight
+                }
+
+    elif source == "scraper":
+        brand_features = pd.read_parquet(FEATURES_DIR / "scraper" / "brand_features.parquet")#
+        brand_timeseries = pd.read_parquet(TIMESERIES_DIR / "scraper" / "brand_timeseries.parquet") 
+             
+        with open (INSIGHT_DIR / "sc_brand_insight.json", "r") as file:
+            brand_insight = json.load(file)
+
+        return {"features" : clean_df_for_json(brand_features), 
+                "timeseries" : clean_df_for_json(brand_timeseries),
+                "insight": brand_insight
+                }
+
+    else:
+        raise HTTPException(status_code=400, detail=f"Error retrieving API brand features, timeseries & insight: Unknown source")
+
+ 
+"""
+SELLER DATA ENDPOINTS - API FEATURES & TIMESERIES & AI INSIGHTS
 """ 
-@router.get("/llm_insight/categories")
-def get_scraped_category_insights():
-    """
-    GET SCRAPED CATEGORY INSIGHTS DATA   
-    """
+@router.get("/dashboard/seller")
+def get_seller():
     try:
-        with open(INSIGHT_DIR / "scraper_category_insight.json", "r") as file:
-            return json.load(file)
-    
+        seller_features = pd.read_parquet(FEATURES_DIR / "api_ingest" / "seller_features.parquet")
+        seller_timeseries = pd.read_parquet(TIMESERIES_DIR / "api_ingest" / "seller_timeseries.parquet") 
+         
+        with open (INSIGHT_DIR / "seller_insight.json", "r") as file:
+            seller_insight = json.load(file)
+
+        return {"features" : clean_df_for_json(seller_features), 
+                "timeseries" : clean_df_for_json(seller_timeseries),
+                "insight": seller_insight
+                }
+     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving scraped category insights: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error retrieving API seller features, timeseries & insight: Unknown source")
+
+
+"""
+SCRAPED CATAEGORIES DATA ENDPOINT - FEATURED, TIMESERIES, AI INSIGHTS
+""" 
+@router.get("/dashboard/category")
+def get_category():
+    try:
+        category_features = pd.read_parquet(FEATURES_DIR / "scraper" / "category_features.parquet") 
+        category_timeseries = pd.read_parquet(TIMESERIES_DIR / "scraper" / "category_timeseries.parquet")
+         
+        with open(INSIGHT_DIR / "category_insight.json", "r") as file:
+            category_insight = json.load(file)
+
+        return {"features" : clean_df_for_json(category_features), 
+                "timeseries" : clean_df_for_json(category_timeseries),
+                "insight": category_insight
+                } 
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error retrieving scraped category features, timeseries & llm_insight: Unknown source")
+ 
