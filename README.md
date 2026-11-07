@@ -340,11 +340,11 @@ Completed components include:
 
 ## 🚧 Next Phase
 
-**Phase 3 — Taipy Intelligence Application**
+**Phase 3 — Intelligence Application**
 
 Phase 3 focuses on transforming the ADIP Intelligence Engine into a complete user-facing intelligence platform:
 
-* Taipy web application
+* Web application
 * interactive intelligence dashboards
 * API-first architecture
 * production deployment
